@@ -153,6 +153,6 @@ public class Tank {
     }
 
     private void fire() {
-        new Bullet(x,y,dir,group);
+        TankFrame.INSTANCE.add(new Bullet(x,y,dir,group));
     }
 }

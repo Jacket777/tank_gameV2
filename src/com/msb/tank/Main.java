@@ -10,8 +10,8 @@ import java.util.concurrent.TimeUnit;
  * */
 public class Main {
     public static void main(String[] args) {
-        TankFrame tf  = new TankFrame();  //窗口标题
-        tf.setVisible(true);
+
+        TankFrame.INSTANCE.setVisible(true);
         while(true){
             try {
                // TimeUnit.MICROSECONDS.sleep(25);
@@ -20,7 +20,7 @@ public class Main {
                 e.printStackTrace();
             }
             //repaint---->update---->paint
-            tf.repaint();
+            TankFrame.INSTANCE.repaint();
         }
     }
 }
