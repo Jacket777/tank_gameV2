@@ -1,25 +1,21 @@
 package com.msb.tank;
 
-import java.awt.image.BufferedImage;
 import java.io.IOException;
-
 import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 
 /**
- * 
- * @author n'n
- *
+ * 资源管理类
+ * 用于处理图片加载到内存中
  */
 public class ResourceMgr {
 	public static BufferedImage goodtankL, goodtankU, goodtankR, goodtankD;
 	public static BufferedImage badtankL, badtankU, badtankR, badtankD;
-
 	public static BufferedImage bulletL, bulletU, bulletR, bulletD;
 	public static BufferedImage[] explodes = new BufferedImage[16];
 
 	static {
 		try {
-
 			goodtankU = ImageIO.read(ResourceMgr.class.getClassLoader().getResourceAsStream("images/Goodtank1.png"));
 			goodtankL = ImageUtil.rotateImage(goodtankU, -90);
 			goodtankR = ImageUtil.rotateImage(goodtankU, 90);
@@ -39,11 +35,8 @@ public class ResourceMgr {
 				explodes[i] = ImageIO
 						.read(ResourceMgr.class.getClassLoader().getResourceAsStream("images/e" + (i + 1) + ".gif"));
 			}
-
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
 	}
-
 }

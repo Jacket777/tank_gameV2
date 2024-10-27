@@ -15,7 +15,7 @@ public class Main {
         while(true){
             try {
                // TimeUnit.MICROSECONDS.sleep(25);
-                Thread.sleep(25);
+                Thread.sleep(50);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
