@@ -11,12 +11,16 @@ public class Bullet extends AbstractGameObject{
     private Group group;
     private boolean live = true;
     public static final int SPEED = 10;
+    private int w = ResourceMgr.bulletU.getWidth();
+    private int h = ResourceMgr.bulletU.getHeight();
+    private Rectangle rect;
 
     public Bullet(int x, int y, Dir dir,Group group){
         this.x = x;
         this.y =y;
         this.dir = dir;
         this.group = group;
+        this.rect = new Rectangle(x,y,w,h);
     }
 
     public boolean isLive() {
@@ -60,6 +64,10 @@ public class Bullet extends AbstractGameObject{
                 y += SPEED;
                 break;
         }
+
+        //更新
+        rect.x = x;
+        rect.y = y;
         boundsCheck();
     }
 
@@ -73,8 +81,8 @@ public class Bullet extends AbstractGameObject{
         if(this.group == tank.getGroup()){
             return;
         }
-        Rectangle rect = new Rectangle(x,y,ResourceMgr.bulletU.getWidth(),
-                ResourceMgr.bulletU.getHeight());
+//        Rectangle rect = new Rectangle(x,y,ResourceMgr.bulletU.getWidth(),
+//                ResourceMgr.bulletU.getHeight());
         Rectangle rectTank = new Rectangle(tank.getX(),tank.getY(),ResourceMgr.goodtankU.getWidth(),
                 ResourceMgr.goodtankU.getHeight());
         if(rect.intersects(rectTank)){
@@ -82,6 +90,7 @@ public class Bullet extends AbstractGameObject{
             tank.die();
         }
     }
+
 
     private void boundsCheck() {
         if(x<0||y<30||x>TankFrame.GAME_WIDTH||y>TankFrame.GAME_HEIGHT){
@@ -93,4 +102,7 @@ public class Bullet extends AbstractGameObject{
         this.setLive(false);
     }
 
+    public Rectangle getRect() {
+        return rect;
+    }
 }
