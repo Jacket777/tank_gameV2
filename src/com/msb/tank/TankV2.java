@@ -40,9 +40,7 @@ public class TankV2 {
         this.y = y;
     }
 
-
-
-
+    
     public TankV2(int x, int y, Dir dir, Group group){
         this.x = x;
         this.y = y;

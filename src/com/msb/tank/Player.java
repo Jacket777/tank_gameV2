@@ -112,6 +112,11 @@ public class Player extends AbstractGameObject{
         move();
     }
 
+    @Override
+    public boolean islive() {
+        return this.live;
+    }
+
     public void keyPressed(KeyEvent e) {
         int key = e.getKeyCode();
         switch(key){

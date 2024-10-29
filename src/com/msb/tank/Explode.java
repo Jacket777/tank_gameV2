@@ -42,6 +42,11 @@ public class Explode extends AbstractGameObject{
 
     }
 
+    @Override
+    public boolean islive() {
+        return this.live;
+    }
+
     private void die() {
         this.live = false;
     }

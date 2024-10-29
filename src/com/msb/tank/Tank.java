@@ -13,7 +13,15 @@ public class Tank extends AbstractGameObject{
     private int oldX,oldY; //坦克原有位置
     private int width, height; //坦克的宽度和高度
 
+
+
+    private Rectangle rect;
+
    // private Random random = new Random();
+
+    public Rectangle getRect() {
+        return rect;
+    }
 
     public boolean isLive() {
         return live;
@@ -61,6 +69,7 @@ public class Tank extends AbstractGameObject{
         this.oldY = y;
         this.width = ResourceMgr.goodtankU.getWidth();
         this.height = ResourceMgr.goodtankU.getHeight();
+        this.rect = new Rectangle(x,y,width,height);
     }
 
     public void paint(Graphics g) {
@@ -88,7 +97,10 @@ public class Tank extends AbstractGameObject{
 
     }
 
-
+    @Override
+    public boolean islive() {
+        return this.live;
+    }
 
 
     public void move(){
@@ -99,7 +111,6 @@ public class Tank extends AbstractGameObject{
         oldX = x;
         oldY = y;
 
-        //
         boundsCheck();
 
         switch(dir){
@@ -119,6 +130,9 @@ public class Tank extends AbstractGameObject{
 
         //敌人坦克方向随机
         randomDir();
+
+        rect.x = x;
+        rect.y = y;
     }
 
     private void boundsCheck() {
@@ -127,7 +141,7 @@ public class Tank extends AbstractGameObject{
         }
     }
 
-    private void back() {
+    public void back() {
         this.x = oldX;
         this.y = oldY;
     }
@@ -151,6 +165,8 @@ public class Tank extends AbstractGameObject{
 
     public void die() {
         this.setLive(false);
-        TankFrame.INSTANCE.addExplode(new Explode(x,y));
+       // TankFrame.INSTANCE.addExplode(new Explode(x,y));
+        TankFrame.INSTANCE.add(new Explode(x,y));
+
     }
 }

@@ -8,11 +8,25 @@ import java.awt.*;
 public class Bullet extends AbstractGameObject{
     private int x,y;
     private Dir dir;
+
+    public Group getGroup() {
+        return group;
+    }
+
+    public void setGroup(Group group) {
+        this.group = group;
+    }
+
     private Group group;
     private boolean live = true;
     public static final int SPEED = 10;
     private int w = ResourceMgr.bulletU.getWidth();
     private int h = ResourceMgr.bulletU.getHeight();
+
+    public void setRect(Rectangle rect) {
+        this.rect = rect;
+    }
+
     private Rectangle rect;
 
     public Bullet(int x, int y, Dir dir,Group group){
@@ -47,6 +61,11 @@ public class Bullet extends AbstractGameObject{
                     break;
             }
        move();
+    }
+
+    @Override
+    public boolean islive() {
+        return this.live;
     }
 
     public void move(){

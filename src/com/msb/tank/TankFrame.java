@@ -1,5 +1,11 @@
 package com.msb.tank;
 
+import com.msb.tank.chainofrespon.BulletTankCollider;
+import com.msb.tank.chainofrespon.BulletWallCollider;
+import com.msb.tank.chainofrespon.Collider;
+import com.msb.tank.chainofrespon.ColliderChain;
+import com.sun.deploy.net.MessageHeader;
+
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -17,6 +23,9 @@ public class TankFrame extends Frame {
 
   private List<Explode> explodes;
 
+  private List<AbstractGameObject>objects;
+  private List<Collider>colliders = new ArrayList<>();
+
   public static final TankFrame INSTANCE = new TankFrame();
 
     private TankFrame(){
@@ -27,32 +36,43 @@ public class TankFrame extends Frame {
 
         initGameObjects();
 
+
     }
+
+
 
     private void initGameObjects() {
         myTank = new Player(100,100,Dir.U,Group.GOOD);
         enemy = new Tank(200,200,Dir.D,Group.BAD);
-        bullets = new ArrayList<>();
-        tanks = new ArrayList<>();
-        explodes = new ArrayList<>();
+//        bullets = new ArrayList<>();
+//        tanks = new ArrayList<>();
+//        explodes = new ArrayList<>();
         int tankCount = Integer.parseInt(PropertyMgr.get("initTankCount"));
+        objects = new ArrayList<>();
 
         for (int i = 0; i < tankCount ; i++) {
-            tanks.add(new Tank(100+50*i, 200,Dir.D,Group.BAD));
+            //tanks.add(new Tank(100+50*i, 200,Dir.D,Group.BAD));
+            this.add(new Tank(100+50*i, 200,Dir.D,Group.BAD));
         }
+        this.add(new Wall(300,200,400,20));
     }
 
 
-    public void add(Bullet bullet){
-        bullets.add(bullet);
-    }
+//    public void add(Bullet bullet){
+//        bullets.add(bullet);
+//    }
 
 
     public void add(AbstractGameObject go){
 
+        objects.add(go);
     }
 
+   private Collider collider = new BulletTankCollider();
 
+    private Collider wallCollider = new BulletWallCollider();
+
+    private ColliderChain chain = new ColliderChain();
     /**
      * awt 自动调用该方法，重新绘制时会被调用
      * g 是awt的参数
@@ -62,38 +82,28 @@ public class TankFrame extends Frame {
     public void paint(Graphics g) {
         Color c = g.getColor();
         g.setColor(Color.WHITE);
-        g.drawString("bullets:"+bullets.size(),10,50);
-        g.drawString("enemies:"+tanks.size(),10,70);
-        g.drawString("explodes:"+explodes.size(),10,90);
+        g.drawString("OBJ: "+ objects.size(),10,50);
+//        g.drawString("bullets:"+bullets.size(),10,50);
+//        g.drawString("enemies:"+tanks.size(),10,70);
+//        g.drawString("explodes:"+explodes.size(),10,90);
         g.setColor(c);
         myTank.paint(g);
-        for(int i = 0; i < tanks.size();i++){
-            if(!tanks.get(i).isLive()){
-                tanks.remove(i);
-            }else{
-                tanks.get(i).paint(g);
-            }
-        }
-       // enemy.paint(g);
-        //一个个画出子弹
-        for (int i = 0; i < bullets.size() ; i++) {
-            for (int j = 0; j < tanks.size(); j++) {
-                bullets.get(i).collideWithTank(tanks.get(j));
-            }
-          //  bullets.get(i).collideWithTank(enemy);
-            if(!bullets.get(i).isLive()){
-                bullets.remove(i);
-            }else{
-                bullets.get(i).paint(g);
-            }
-        }
 
+        for (int i = 0; i < objects.size(); i++) {
+            if(!objects.get(i).islive()){
+                objects.remove(i);
+                break;
+            }
+            AbstractGameObject go1 = objects.get(i);
+            for(int j = 0; j < objects.size();j++){
+                AbstractGameObject go2 = objects.get(j);
+               chain.collide(go1,go2);
+//                collider.collide(go1,go2);
+//                wallCollider.collide(go1,go2);
+            }
 
-        for(int i = 0; i < explodes.size();i++){
-            if(!explodes.get(i).isLive()){
-                explodes.remove(i);
-            }else{
-                explodes.get(i).paint(g);
+            if(objects.get(i).islive()){
+                objects.get(i).paint(g);
             }
         }
     }
@@ -119,9 +129,9 @@ public class TankFrame extends Frame {
        g.drawImage(offScreenImage,0,0,null);
    }
 
-    public void addExplode(Explode explode) {
-       this.explodes.add(explode);
-    }
+//    public void addExplode(Explode explode) {
+//       this.explodes.add(explode);
+//    }
 
 
     /**
