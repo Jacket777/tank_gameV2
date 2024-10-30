@@ -3,13 +3,14 @@ package com.msb.tank;
 import com.msb.tank.chainofrespon.ColliderChain;
 
 import java.awt.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * model - view
  */
-public class GameModel {
+public class GameModel implements Serializable {
     private Player myTank;
    // private Tank enemy;
     private ColliderChain chain = new ColliderChain();

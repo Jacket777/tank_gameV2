@@ -11,10 +11,8 @@ public class BulletWallCollider implements Collider{
         if(go1 instanceof Bullet && go2 instanceof Wall){
             Bullet b = (Bullet) go1;
             Wall w = (Wall) go2;
-            System.out.println("x = " +b.getRect().x);
             if(b.isLive()){
                 if(b.getRect().intersects(w.getRect())){
-                    System.out.println("=================");
                     b.die();
                     return false;
                 }

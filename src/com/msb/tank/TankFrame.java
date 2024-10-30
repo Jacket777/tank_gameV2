@@ -9,10 +9,13 @@ import com.sun.deploy.net.MessageHeader;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.*;
 import java.util.*;
 import java.util.List;
 
-public class TankFrame extends Frame {
+import static com.msb.tank.Dir.L;
+
+public class TankFrame extends Frame implements Serializable{
 //  private Player myTank;
 //  private Tank enemy;
   public static final int GAME_WIDTH = 800;
@@ -146,9 +149,15 @@ public class TankFrame extends Frame {
     private class TankKeyListener extends KeyAdapter {
         @Override
         public void keyPressed(KeyEvent e) {
-            gm.getMyTank().keyPressed(e);
-           // enemy.keyPressed(e);
-
+            int key = e.getKeyCode();
+            if(key == KeyEvent.VK_S){
+                save();
+            }else if(key == KeyEvent.VK_L){
+                load();
+            }else{
+                System.out.println("=============");
+                gm.getMyTank().keyPressed(e);
+            }
         }
 
         @Override
@@ -157,5 +166,57 @@ public class TankFrame extends Frame {
             // myTank.keyReleased(e);
            //  enemy.keyReleased(e);
         }
+    }
+
+
+    /**
+     * 保存游戏当前元素
+     */
+    public void save(){
+        ObjectOutputStream oos = null;
+        try {
+            File f = new File("E:/tank.dat");
+            FileOutputStream fos = new FileOutputStream(f);
+            oos = new ObjectOutputStream(fos);
+            oos.writeObject(gm);
+            oos.flush();
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            if(null!=oos){
+                try {
+                    oos.close();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+    }
+
+
+    /**
+     * 恢复上一次保存的游戏元素
+     */
+    public void load(){
+        ObjectInputStream ois = null;
+        try{
+            File f = new File("E:/tank.dat");
+            FileInputStream fis = new FileInputStream(f);
+            ois = new ObjectInputStream(fis);
+            this.gm = (GameModel) (ois.readObject());
+        }catch (Exception e){
+           e.printStackTrace();
+        } finally{
+            if(ois!=null){
+                try {
+                    ois.close();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+
+        }
+
     }
 }

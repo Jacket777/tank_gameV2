@@ -6,10 +6,11 @@ import com.msb.tank.strategy.FourDirFireStrategy;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.io.Serializable;
 
 import static com.msb.tank.Dir.L;
 
-public class Player extends AbstractGameObject{
+public class Player extends AbstractGameObject implements Serializable {
     private int x,y;//坦克的位置
     private Dir dir; //坦克的方向
     public static final int SPEED = 5;
