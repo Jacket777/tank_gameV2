@@ -13,8 +13,6 @@ public class Tank extends AbstractGameObject{
     private int oldX,oldY; //坦克原有位置
     private int width, height; //坦克的宽度和高度
 
-
-
     private Rectangle rect;
 
    // private Random random = new Random();
@@ -160,13 +158,13 @@ public class Tank extends AbstractGameObject{
 
         int bx = x+ ResourceMgr.goodtankD.getWidth()/2 - ResourceMgr.bulletU.getWidth()/2;
         int by = y+ ResourceMgr.goodtankD.getHeight()/2 - ResourceMgr.bulletU.getHeight()/2;
-        TankFrame.INSTANCE.add(new Bullet(bx,by,dir,group));
+        TankFrame.INSTANCE.getGm().add(new Bullet(bx,by,dir,group));
     }
 
     public void die() {
         this.setLive(false);
        // TankFrame.INSTANCE.addExplode(new Explode(x,y));
-        TankFrame.INSTANCE.add(new Explode(x,y));
+        TankFrame.INSTANCE.getGm().add(new Explode(x,y));
 
     }
 }

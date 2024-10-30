@@ -13,18 +13,19 @@ import java.util.*;
 import java.util.List;
 
 public class TankFrame extends Frame {
-  private Player myTank;
-  private Tank enemy;
+//  private Player myTank;
+//  private Tank enemy;
   public static final int GAME_WIDTH = 800;
   public static final int GAME_HEIGHT = 600;
   private Image offScreenImage = null;  //利用双缓冲解决图片闪烁问题
-  private List<Bullet> bullets;
-  private List<Tank>tanks;
-
-  private List<Explode> explodes;
-
-  private List<AbstractGameObject>objects;
-  private List<Collider>colliders = new ArrayList<>();
+//  private List<Bullet> bullets;
+//  private List<Tank>tanks;
+//
+//  private List<Explode> explodes;
+//
+//  private List<AbstractGameObject>objects;
+//  private List<Collider>colliders = new ArrayList<>();
+    private GameModel gm = new GameModel();
 
   public static final TankFrame INSTANCE = new TankFrame();
 
@@ -34,28 +35,28 @@ public class TankFrame extends Frame {
         this.setSize(GAME_WIDTH,GAME_HEIGHT);
         this.addKeyListener(new TankKeyListener());//添加监听器
 
-        initGameObjects();
+       // initGameObjects();
 
 
     }
 
 
 
-    private void initGameObjects() {
-        myTank = new Player(100,100,Dir.U,Group.GOOD);
-        enemy = new Tank(200,200,Dir.D,Group.BAD);
-//        bullets = new ArrayList<>();
-//        tanks = new ArrayList<>();
-//        explodes = new ArrayList<>();
-        int tankCount = Integer.parseInt(PropertyMgr.get("initTankCount"));
-        objects = new ArrayList<>();
-
-        for (int i = 0; i < tankCount ; i++) {
-            //tanks.add(new Tank(100+50*i, 200,Dir.D,Group.BAD));
-            this.add(new Tank(100+50*i, 200,Dir.D,Group.BAD));
-        }
-        this.add(new Wall(300,200,400,20));
-    }
+//    private void initGameObjects() {
+//        myTank = new Player(100,100,Dir.U,Group.GOOD);
+//        enemy = new Tank(200,200,Dir.D,Group.BAD);
+////        bullets = new ArrayList<>();
+////        tanks = new ArrayList<>();
+////        explodes = new ArrayList<>();
+//        int tankCount = Integer.parseInt(PropertyMgr.get("initTankCount"));
+//        objects = new ArrayList<>();
+//
+//        for (int i = 0; i < tankCount ; i++) {
+//            //tanks.add(new Tank(100+50*i, 200,Dir.D,Group.BAD));
+//            this.add(new Tank(100+50*i, 200,Dir.D,Group.BAD));
+//        }
+//        this.add(new Wall(300,200,400,20));
+//    }
 
 
 //    public void add(Bullet bullet){
@@ -63,16 +64,16 @@ public class TankFrame extends Frame {
 //    }
 
 
-    public void add(AbstractGameObject go){
-
-        objects.add(go);
-    }
+//    public void add(AbstractGameObject go){
+//
+//        objects.add(go);
+//    }
 
    private Collider collider = new BulletTankCollider();
 
     private Collider wallCollider = new BulletWallCollider();
 
-    private ColliderChain chain = new ColliderChain();
+   //    private ColliderChain chain = new ColliderChain();
     /**
      * awt 自动调用该方法，重新绘制时会被调用
      * g 是awt的参数
@@ -80,32 +81,33 @@ public class TankFrame extends Frame {
      */
     @Override
     public void paint(Graphics g) {
-        Color c = g.getColor();
-        g.setColor(Color.WHITE);
-        g.drawString("OBJ: "+ objects.size(),10,50);
+        gm.paint(g);
+//        Color c = g.getColor();
+//        g.setColor(Color.WHITE);
+//        g.drawString("OBJ: "+ objects.size(),10,50);
 //        g.drawString("bullets:"+bullets.size(),10,50);
 //        g.drawString("enemies:"+tanks.size(),10,70);
 //        g.drawString("explodes:"+explodes.size(),10,90);
-        g.setColor(c);
-        myTank.paint(g);
+       // g.setColor(c);
+       // myTank.paint(g);
 
-        for (int i = 0; i < objects.size(); i++) {
-            if(!objects.get(i).islive()){
-                objects.remove(i);
-                break;
-            }
-            AbstractGameObject go1 = objects.get(i);
-            for(int j = 0; j < objects.size();j++){
-                AbstractGameObject go2 = objects.get(j);
-               chain.collide(go1,go2);
-//                collider.collide(go1,go2);
-//                wallCollider.collide(go1,go2);
-            }
-
-            if(objects.get(i).islive()){
-                objects.get(i).paint(g);
-            }
-        }
+//        for (int i = 0; i < objects.size(); i++) {
+//            if(!objects.get(i).islive()){
+//                objects.remove(i);
+//                break;
+//            }
+//            AbstractGameObject go1 = objects.get(i);
+//            for(int j = 0; j < objects.size();j++){
+//                AbstractGameObject go2 = objects.get(j);
+//               chain.collide(go1,go2);
+////                collider.collide(go1,go2);
+////                wallCollider.collide(go1,go2);
+//            }
+//
+//            if(objects.get(i).islive()){
+//                objects.get(i).paint(g);
+//            }
+//        }
     }
 
 
@@ -134,20 +136,25 @@ public class TankFrame extends Frame {
 //    }
 
 
+    public GameModel getGm(){
+      return this.gm;
+    }
+
     /**
      * 内部类，处理键盘监听方法
      */
     private class TankKeyListener extends KeyAdapter {
         @Override
         public void keyPressed(KeyEvent e) {
-            myTank.keyPressed(e);
+            gm.getMyTank().keyPressed(e);
            // enemy.keyPressed(e);
 
         }
 
         @Override
         public void keyReleased(KeyEvent e) {
-             myTank.keyReleased(e);
+            gm.getMyTank().keyReleased(e);
+            // myTank.keyReleased(e);
            //  enemy.keyReleased(e);
         }
     }
