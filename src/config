@@ -1,0 +1,6 @@
+#key - value
+initTankCount=5
+gameWidth=600
+gameHeight=800
+tankFireStrategy=DefaultFireStrategy
+colliders=BulletTankCollider,BulletWallCollider
