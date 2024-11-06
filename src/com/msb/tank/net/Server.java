@@ -40,6 +40,8 @@ public class Server {
             //处理连接好了连接
             socketChannel.pipeline()
                            // .addLast(new TankMsgDecoder())
+                    .addLast(new MsgEncoder())
+                    .addLast(new MsgDecoder())
                     .addLast(new MyChildNettyHandler());
         }
     }
@@ -60,7 +62,8 @@ public class Server {
         @Override
         public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
           // TankMsg tm = (TankMsg) msg;
-            System.out.println(" msg "+msg);
+            TankJoinMsg tjm = (TankJoinMsg)msg;
+            System.out.println(" msg "+tjm);
            ServerFrame.INSTANCE.updateClientMsg(msg.toString());
         }
 

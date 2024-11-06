@@ -28,6 +28,7 @@ public class Client {
                     channel = socketChannel;
                     socketChannel.pipeline()
                             //.addLast(new TankMsgEncoder()) //加编码器
+                            .addLast(new MsgEncoder())
                             .addLast(new MyClientChatHandler());
                 }
             });
@@ -71,11 +72,11 @@ class MyClientChatHandler extends ChannelInboundHandlerAdapter {
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
        // ByteBuf byteBuf = Unpooled.copiedBuffer("hello netty server".getBytes());
         //ctx.writeAndFlush(byteBuf);
-        Player p = TankFrame.INSTANCE.getGm().getMyTank();
-        TankJoinMsg tjm = new TankJoinMsg(p);
-        ByteBuf buf = Unpooled.copiedBuffer(tjm.toBytes());
-        ctx.writeAndFlush(buf);
-       // ctx.writeAndFlush(new TankJoinMsg(TankFrame.INSTANCE.getGm().getMyTank()).toBytes());
+//        Player p = TankFrame.INSTANCE.getGm().getMyTank();
+//        TankJoinMsg tjm = new TankJoinMsg(p);
+//        ByteBuf buf = Unpooled.copiedBuffer(tjm.toBytes());
+//        ctx.writeAndFlush(buf);
+        ctx.writeAndFlush(new TankJoinMsg(TankFrame.INSTANCE.getGm().getMyTank()));
      //  ctx.writeAndFlush(new TankMsg(5,8));
     }
 

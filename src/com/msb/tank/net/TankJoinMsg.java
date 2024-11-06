@@ -4,9 +4,7 @@ import com.msb.tank.Dir;
 import com.msb.tank.Group;
 import com.msb.tank.Player;
 
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.UUID;
 
 /**
@@ -18,6 +16,56 @@ public class TankJoinMsg {
     private boolean moving;
     private Group group;
     private UUID id; //自己的id
+
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
+    public Dir getDir() {
+        return dir;
+    }
+
+    public void setDir(Dir dir) {
+        this.dir = dir;
+    }
+
+    public boolean isMoving() {
+        return moving;
+    }
+
+    public void setMoving(boolean moving) {
+        this.moving = moving;
+    }
+
+    public Group getGroup() {
+        return group;
+    }
+
+    public void setGroup(Group group) {
+        this.group = group;
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+
 
 
     public TankJoinMsg() {
@@ -49,7 +97,6 @@ public class TankJoinMsg {
             dos.writeLong(id.getLeastSignificantBits());
             dos.flush();
             bytes = baos.toByteArray();
-
         }catch(IOException e){
             e.printStackTrace();
         }finally{
@@ -82,5 +129,25 @@ public class TankJoinMsg {
                 ", group=" + group +
                 ", id=" + id +
                 '}';
+    }
+
+    public void parse(byte[] bytes) {
+        DataInputStream dis = new DataInputStream(new ByteArrayInputStream(bytes));
+        try{
+            this.x = dis.readInt();
+            this.y = dis.readInt();
+            this.dir = Dir.values()[dis.readInt()];
+            this.moving = dis.readBoolean();
+            this.group = Group.values()[dis.readInt()];
+            this.id = new UUID(dis.readLong(),dis.readLong());
+        }catch(IOException e){
+            e.printStackTrace();
+        }finally{
+            try {
+                dis.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 }
