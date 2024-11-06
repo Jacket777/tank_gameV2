@@ -7,6 +7,7 @@ import com.msb.tank.strategy.FourDirFireStrategy;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.io.Serializable;
+import java.util.UUID;
 
 import static com.msb.tank.Dir.L;
 
@@ -20,6 +21,28 @@ public class Player extends AbstractGameObject implements Serializable {
     private boolean live = true;
 
     private FireStrategy strategy = null; //坦克的射击方式
+
+    private UUID id = UUID.randomUUID();
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+
+
+    public boolean isMoving() {
+        return moving;
+    }
+
+    public void setMoving(boolean moving) {
+        this.moving = moving;
+    }
+
+
 
     public Dir getDir() {
         return dir;
@@ -214,37 +237,19 @@ public class Player extends AbstractGameObject implements Serializable {
     }
 
     private void fire() {
-//        int bx = x+ ResourceMgr.goodtankD.getWidth()/2 - ResourceMgr.bulletU.getWidth()/2;
-//        int by = y+ ResourceMgr.goodtankD.getHeight()/2 - ResourceMgr.bulletU.getHeight()/2;
-//      //  TankFrame.INSTANCE.add(new Bullet(bx,by,dir,group));
-//
-//        Dir[]dirs = Dir.values();
-//        for(Dir d:dirs){
-//            TankFrame.INSTANCE.add(new Bullet(bx,by,d,group));
-//        }
-
-        //FireStrategy strategy = new DefaultFireStrategy();
-       // FireStrategy strategy = new FourDirFireStrategy();
-
-//      ClassLoader loader = Player.class.getClassLoader();
-//      FireStrategy strategy = null;
-//      String className = PropertyMgr.get("tankFireStrategy");
-//      try{
-//         // Class clazz = loader.loadClass("com.msb.tank.strategy."+className);
-//          //下面的也可以
-//          Class clazz = Class.forName("com.msb.tank.strategy."+className);
-//
-//          strategy = (FireStrategy)(clazz.getDeclaredConstructor().newInstance());
-//      }catch(Exception e){
-//          e.printStackTrace();
-//      }
-
-
         strategy.fire(this);
-
     }
 
     public void die() {
         this.setLive(false);
+    }
+
+    @Override
+    public String toString() {
+        return "Player{" +
+                "x=" + x +
+                ", y=" + y +
+                ", id=" + id +
+                '}';
     }
 }

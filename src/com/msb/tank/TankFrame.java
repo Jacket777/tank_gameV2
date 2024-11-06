@@ -39,8 +39,6 @@ public class TankFrame extends Frame implements Serializable{
         this.addKeyListener(new TankKeyListener());//添加监听器
 
        // initGameObjects();
-
-
     }
 
 
@@ -134,9 +132,6 @@ public class TankFrame extends Frame implements Serializable{
        g.drawImage(offScreenImage,0,0,null);
    }
 
-//    public void addExplode(Explode explode) {
-//       this.explodes.add(explode);
-//    }
 
 
     public GameModel getGm(){
@@ -155,7 +150,6 @@ public class TankFrame extends Frame implements Serializable{
             }else if(key == KeyEvent.VK_L){
                 load();
             }else{
-                System.out.println("=============");
                 gm.getMyTank().keyPressed(e);
             }
         }
@@ -163,8 +157,6 @@ public class TankFrame extends Frame implements Serializable{
         @Override
         public void keyReleased(KeyEvent e) {
             gm.getMyTank().keyReleased(e);
-            // myTank.keyReleased(e);
-           //  enemy.keyReleased(e);
         }
     }
 
@@ -215,8 +207,6 @@ public class TankFrame extends Frame implements Serializable{
                     throw new RuntimeException(e);
                 }
             }
-
         }
-
     }
 }

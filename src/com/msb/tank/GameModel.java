@@ -33,12 +33,11 @@ public class GameModel implements Serializable {
             //tanks.add(new Tank(100+50*i, 200,Dir.D,Group.BAD));
             this.add(new Tank(100+50*i, 200,Dir.D,Group.BAD));
         }
-        this.add(new Wall(300,200,400,20));
+       // this.add(new Wall(300,200,400,20));
     }
 
 
     public void add(AbstractGameObject go){
-
         objects.add(go);
     }
 
