@@ -1,7 +1,10 @@
 package com.msb.tank;
 
+import com.msb.tank.net.TankJoinMsg;
+
 import java.awt.*;
 import java.util.Random;
+import java.util.UUID;
 
 public class Tank extends AbstractGameObject{
     private  Group group;
@@ -15,7 +18,16 @@ public class Tank extends AbstractGameObject{
 
     private Rectangle rect;
 
-   // private Random random = new Random();
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    private UUID id;
+
 
     public Rectangle getRect() {
         return rect;
@@ -58,11 +70,31 @@ public class Tank extends AbstractGameObject{
 
 
 
+    public Tank(TankJoinMsg msg) {
+        this.x = msg.getX();
+        this.y = msg.getY();
+        this.dir = msg.getDir();
+        this.moving = msg.isMoving();
+        this.group = msg.getGroup();
+        this.id = msg.getId();
+        this.oldX = x;
+        this.oldY = y;
+        this.width = ResourceMgr.goodtankU.getWidth();
+        this.height = ResourceMgr.goodtankU.getHeight();
+        this.rect = new Rectangle(x,y,width,height);
+
+
+    }
+
+    // private Random random = new Random();
+
+
     public Tank(int x, int y, Dir dir, Group group){
         this.x = x;
         this.y = y;
         this.dir = dir;
-        this.group = Group.BAD;
+        //this.group = Group.BAD;
+        this.group = group;
         this.oldX = x;
         this.oldY = y;
         this.width = ResourceMgr.goodtankU.getWidth();
@@ -76,16 +108,20 @@ public class Tank extends AbstractGameObject{
         }
         switch(dir){
             case L:
-                g.drawImage(ResourceMgr.badtankL,x,y,null);
+                g.drawImage(this.group.equals(Group.BAD)?ResourceMgr.badtankL:ResourceMgr.goodtankL,x,y,null);
+                //g.drawImage(ResourceMgr.badtankL,x,y,null);
                 break;
             case U:
-                g.drawImage(ResourceMgr.badtankU,x,y,null);
+                g.drawImage(this.group.equals(Group.BAD)?ResourceMgr.badtankU:ResourceMgr.goodtankU,x,y,null);
+                //g.drawImage(ResourceMgr.badtankU,x,y,null);
                 break;
             case R:
-                g.drawImage(ResourceMgr.badtankR,x,y,null);
+                g.drawImage(this.group.equals(Group.BAD)?ResourceMgr.badtankR:ResourceMgr.goodtankR,x,y,null);
+                //g.drawImage(ResourceMgr.badtankR,x,y,null);
                 break;
             case D:
-                g.drawImage(ResourceMgr.badtankD,x,y,null);
+                g.drawImage(this.group.equals(Group.BAD)?ResourceMgr.badtankD:ResourceMgr.goodtankD,x,y,null);
+                //g.drawImage(ResourceMgr.badtankD,x,y,null);
                 break;
         }
         move();
@@ -167,4 +203,6 @@ public class Tank extends AbstractGameObject{
         TankFrame.INSTANCE.getGm().add(new Explode(x,y));
 
     }
+
+
 }

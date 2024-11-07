@@ -98,6 +98,10 @@ public class Player extends AbstractGameObject implements Serializable {
         if(!this.isLive()) {
          return;
         }
+        Color c = g.getColor();
+        g.setColor(Color.yellow);
+        g.drawString(id.toString(),x,y-10);
+        g.setColor(c);
       //  g.fillRect(x,y, 50,50);
         if(this.group == Group.GOOD){
             switch(dir){

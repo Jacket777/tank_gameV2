@@ -4,6 +4,7 @@ package com.msb.tank;
 
 import java.awt.*;
 import java.util.concurrent.TimeUnit;
+import com.msb.tank.net.Client;
 
 /**
  * 程序的入口
@@ -27,6 +28,6 @@ public class Main {
             }
         }).start();
 
-       // Client.INSTANCE.connect();
+       Client.INSTANCE.connect();
     }
 }

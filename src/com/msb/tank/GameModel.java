@@ -6,6 +6,8 @@ import java.awt.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+import java.util.UUID;
 
 /**
  * model - view
@@ -15,14 +17,21 @@ public class GameModel implements Serializable {
    // private Tank enemy;
     private ColliderChain chain = new ColliderChain();
     private List<AbstractGameObject> objects;
+    Random r = new Random();
 
     public GameModel(){
         initGameObjects();
     }
 
     private void initGameObjects() {
-        myTank = new Player(100,100,Dir.U,Group.GOOD);
-       // enemy = new Tank(200,200,Dir.D,Group.BAD);
+        //myTank = new Player(100,100,Dir.U,Group.GOOD);
+        //网络版 坦克随机生成两个
+        myTank = new Player(50+r.nextInt(700),
+                50+r.nextInt(500),
+                Dir.values()[r.nextInt(Dir.values().length)],
+                Group.values()[r.nextInt(Group.values().length)]);
+
+        // enemy = new Tank(200,200,Dir.D,Group.BAD);
 //        bullets = new ArrayList<>();
 //        tanks = new ArrayList<>();
 //        explodes = new ArrayList<>();
@@ -75,4 +84,15 @@ public class GameModel implements Serializable {
     }
 
 
+    public Tank findTankByUUID(UUID id) {
+        for(AbstractGameObject obj:objects){
+            if(obj instanceof Tank){
+                Tank t = (Tank)obj;
+                if(id.equals(t.getId())){
+                  return t;
+                }
+            }
+        }
+        return null;
+    }
 }

@@ -38,7 +38,8 @@ public class ClientFrame extends Frame {
     }
 
     public void connectToServer() throws Exception {
-        c = new Client();
+       // c = new Client();
+        c = Client.INSTANCE;
         c.connect();
     }
 

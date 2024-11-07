@@ -14,6 +14,7 @@ import io.netty.util.ReferenceCountUtil;
 
 public class Client {
     private Channel channel = null;
+    public static Client INSTANCE  = new Client();
 
 
     public  void connect() throws Exception{
@@ -29,7 +30,8 @@ public class Client {
                     socketChannel.pipeline()
                             //.addLast(new TankMsgEncoder()) //加编码器
                             .addLast(new MsgEncoder())
-                            .addLast(new MyClientChatHandler());
+                            .addLast(new MsgDecoder())
+                            .addLast(new MyHandler());
                 }
             });
 
@@ -51,6 +53,10 @@ public class Client {
         channel.writeAndFlush(Unpooled.copiedBuffer(text.getBytes()));
     }
 
+    public void send(TankJoinMsg msg){
+        channel.writeAndFlush(msg);
+    }
+
     public void closeConnection() {
         send("__bye__");
         channel.close();
@@ -59,6 +65,9 @@ public class Client {
     public static void main(String[] args) throws Exception {
         Client c = new Client();
         c.connect();
+    }
+
+    private Client() {
     }
 }
 
@@ -104,6 +113,31 @@ class MyClientChatHandler extends ChannelInboundHandlerAdapter {
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         cause.printStackTrace();
         ctx.close();
+    }
+}
+
+
+/**
+ * 简单的处理消息
+ */
+class MyHandler extends SimpleChannelInboundHandler<TankJoinMsg>{
+
+    @Override
+    public void channelActive(ChannelHandlerContext ctx) throws Exception {
+        // ByteBuf byteBuf = Unpooled.copiedBuffer("hello netty server".getBytes());
+        //ctx.writeAndFlush(byteBuf);
+//        Player p = TankFrame.INSTANCE.getGm().getMyTank();
+//        TankJoinMsg tjm = new TankJoinMsg(p);
+//        ByteBuf buf = Unpooled.copiedBuffer(tjm.toBytes());
+//        ctx.writeAndFlush(buf);
+        ctx.writeAndFlush(new TankJoinMsg(TankFrame.INSTANCE.getGm().getMyTank()));
+        //  ctx.writeAndFlush(new TankMsg(5,8));
+    }
+
+    @Override
+    protected void channelRead0(ChannelHandlerContext ctx, TankJoinMsg msg) throws Exception {
+        System.out.println("msg: "+msg);
+        msg.handle();
     }
 }
 

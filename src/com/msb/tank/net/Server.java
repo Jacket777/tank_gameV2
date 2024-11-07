@@ -65,6 +65,7 @@ public class Server {
             TankJoinMsg tjm = (TankJoinMsg)msg;
             System.out.println(" msg "+tjm);
            ServerFrame.INSTANCE.updateClientMsg(msg.toString());
+           clients.writeAndFlush(msg);
         }
 
         @Override

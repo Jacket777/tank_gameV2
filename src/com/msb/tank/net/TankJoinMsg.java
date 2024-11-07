@@ -1,8 +1,6 @@
 package com.msb.tank.net;
 
-import com.msb.tank.Dir;
-import com.msb.tank.Group;
-import com.msb.tank.Player;
+import com.msb.tank.*;
 
 import java.io.*;
 import java.util.UUID;
@@ -149,5 +147,19 @@ public class TankJoinMsg {
                 throw new RuntimeException(e);
             }
         }
+    }
+
+    public void handle() {
+        //判断id是否相同
+        if(this.id.equals(TankFrame.INSTANCE.getGm().getMyTank().getId())){
+            return;
+        }
+        if(TankFrame.INSTANCE.getGm().findTankByUUID(this.id)!=null){
+            return;
+        }
+        Tank tank = new Tank(this);
+        TankFrame.INSTANCE.getGm().add(tank);
+        //把自己的发进来
+        Client.INSTANCE.send(new TankJoinMsg(TankFrame.INSTANCE.getGm().getMyTank()));
     }
 }
