@@ -1,5 +1,8 @@
 package com.msb.tank;
 
+import com.msb.tank.net.Client;
+import com.msb.tank.net.TankStartMovingMsg;
+import com.msb.tank.net.TankStopMsg;
 import com.msb.tank.strategy.DefaultFireStrategy;
 import com.msb.tank.strategy.FireStrategy;
 import com.msb.tank.strategy.FourDirFireStrategy;
@@ -152,25 +155,62 @@ public class Player extends AbstractGameObject implements Serializable {
                 bL = true;
                 break;
             case KeyEvent.VK_UP:
-                dir = Dir.U;
+                bU = true;
+                //dir = Dir.U;
                 break;
             case KeyEvent.VK_RIGHT:
-                dir = Dir.R;
+                bR = true;
+                //dir = Dir.R;
                 break;
             case KeyEvent.VK_DOWN:
-
-                dir = Dir.D;
+                bD = true;
+                //dir = Dir.D;
+                break;
+            default:
                 break;
         }
         setMainDir();
+    }
+
+    public void keyReleased(KeyEvent e) {
+        moving = false;
+        int key = e.getKeyCode();
+        switch(key){
+            case KeyEvent.VK_LEFT:
+                bL = false;
+                break;
+            case KeyEvent.VK_UP:
+                bU = false;
+                break;
+            case KeyEvent.VK_RIGHT:
+                bR = false;
+                break;
+            case KeyEvent.VK_DOWN:
+                bD = false;
+                break;
+            case KeyEvent.VK_CONTROL:
+                fire();
+                break;
+        }
+        setMainDir();
+
     }
 
     /**
      * 设置坦克的方向
      */
     private void setMainDir() {
-        if(!bL&&!bU&&!bR&&!bD){
+        boolean oldMoving = moving;
+        System.out.println("bL: "+bL);
+        System.out.println("bU: "+bU);
+        System.out.println("bR: "+bR);
+        System.out.println("bD: "+bD);
+        System.out.println("===============================");
+        if(!bL && !bU && !bR&& !bD){
+           // System.out.println("stop tank moving ...");
             moving = false; //all key is up so tank is stop
+            Client.INSTANCE.send(new TankStopMsg(this.id,this.x,this.y));
+           // System.out.println("have send the message ...");
         }else{
             moving = true;
             if(!bL&&bU&&!bR&&!bD){
@@ -182,8 +222,15 @@ public class Player extends AbstractGameObject implements Serializable {
             if(!bL&&!bU&&!bR&&bD){
                 dir = Dir.D;
             }
-        }
+            if(bL&&!bU&&!bR&&!bD){
+                dir = L;
+            }
 
+            //原有状态不是移动状态，则坦克立刻开始移动
+            if(!oldMoving){
+                Client.INSTANCE.send(new TankStartMovingMsg(this.id,this.x,this.y,this.dir));
+            }
+        }
     }
 
 
@@ -203,33 +250,12 @@ public class Player extends AbstractGameObject implements Serializable {
                 y += SPEED;
                 break;
         }
-
     }
 
 
 
-    public void keyReleased(KeyEvent e) {
-        moving = false;
-        int key = e.getKeyCode();
-        switch(key){
-            case KeyEvent.VK_LEFT:
-                dir = L;
-                break;
-            case KeyEvent.VK_UP:
-                dir = Dir.U;
-                break;
-            case KeyEvent.VK_RIGHT:
-                dir = Dir.R;
-                break;
-            case KeyEvent.VK_DOWN:
-                dir = Dir.D;
-                break;
-            case KeyEvent.VK_CONTROL:
-                fire();
-                break;
-        }
 
-    }
+
     private void initFireStrategy(){
         String className = PropertyMgr.get("tankFireStrategy");
         try{

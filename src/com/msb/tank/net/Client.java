@@ -57,6 +57,10 @@ public class Client {
         channel.writeAndFlush(msg);
     }
 
+    public void send(Msg msg){
+        channel.writeAndFlush(msg);
+    }
+
     public void closeConnection() {
         send("__bye__");
         channel.close();
@@ -120,7 +124,7 @@ class MyClientChatHandler extends ChannelInboundHandlerAdapter {
 /**
  * 简单的处理消息
  */
-class MyHandler extends SimpleChannelInboundHandler<TankJoinMsg>{
+class MyHandler extends SimpleChannelInboundHandler<Msg>{
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
@@ -135,7 +139,7 @@ class MyHandler extends SimpleChannelInboundHandler<TankJoinMsg>{
     }
 
     @Override
-    protected void channelRead0(ChannelHandlerContext ctx, TankJoinMsg msg) throws Exception {
+    protected void channelRead0(ChannelHandlerContext ctx, Msg msg) throws Exception {
         System.out.println("msg: "+msg);
         msg.handle();
     }

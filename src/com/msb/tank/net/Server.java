@@ -61,10 +61,11 @@ public class Server {
          */
         @Override
         public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-          // TankMsg tm = (TankMsg) msg;
-            TankJoinMsg tjm = (TankJoinMsg)msg;
-            System.out.println(" msg "+tjm);
-           ServerFrame.INSTANCE.updateClientMsg(msg.toString());
+//            TankJoinMsg tjm = (TankJoinMsg)msg;
+//            System.out.println(" msg "+tjm);
+            Msg info = (Msg)msg;
+            System.out.println(info.toString());
+           ServerFrame.INSTANCE.updateClientMsg(info.toString());
            clients.writeAndFlush(msg);
         }
 
